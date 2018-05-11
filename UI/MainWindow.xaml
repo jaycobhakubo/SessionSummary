@@ -1,0 +1,52 @@
+﻿<!-- This is an unpublished work protected under the copyright laws of the
+     United States and other countries.  All rights reserved.  Should
+     publication occur the following will apply:  © 2011 GameTech
+     International, Inc. -->
+<ui:EliteWindowBase x:Class="GameTech.Elite.Client.Modules.SessionSummary.UI.MainWindow"
+                    x:ClassModifier="internal"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="clr-namespace:GameTech.Elite.UI;assembly=GameTech.Elite.UI"
+                    xmlns:local="clr-namespace:GameTech.Elite.Client.Modules.SessionSummary.UI"
+                    xmlns:cr="clr-namespace:SAPBusinessObjects.WPF.Viewer;assembly=SAPBusinessObjects.WPF.Viewer"
+                    Title="Session Summary -- FortuNet, Inc." Width="1024" Height="710" Icon="../Resources/SessionSummary.ico"
+                    Style="{DynamicResource EliteWindow}" WindowStartupLocation="CenterScreen" Loaded="OnLoaded">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="L" Command="{Binding SummaryVM.EditSessionCostCommand}" />
+    </Window.InputBindings>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="E_xit" Command="{Binding FileExitCommand}" />
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Session Costs ..." Command="{Binding EditSessionCostsCommand}" />
+                <MenuItem Header="Se_lect Session Costs ..." Command="{Binding SummaryVM.EditSessionCostCommand}"  InputGestureText="Ctrl+L" />
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Command="{Binding HelpAboutCommand}" />
+            </MenuItem>
+        </Menu>
+        
+        <!-- 
+        Not sure why this is a tab control at this time, but for now I'm just 
+        going to hide the "tab" part in case we want to add more tabs in the 
+        future, we can add a trigger to show tabs only if they are needed and 
+        the UI should be easy to adjust to do so.
+        -->
+        <TabControl Focusable="False">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
+                    <Setter Property="Visibility"
+                            Value="Collapsed"/>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabItem Header="Summary">
+                <ContentControl Background="Transparent" Content="{Binding DisplayedSummaryView}"/>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</ui:EliteWindowBase>

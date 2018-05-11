@@ -1,0 +1,26 @@
+'------------------------------------------------------------------------------
+'
+'Clear the build dates from an EXE/DLL/OCX
+'
+'------------------------------------------------------------------------------
+
+Sub Main
+	PEFileProxy.PostDebugString "Clearing Dates."
+	PEFileProxy.UpdateCheckSum = True
+	PEFileProxy.CreateBackUp = False
+
+	PEFileProxy.PostDebugString "Opening %plhd_file%"
+	
+
+  	PEFileProxy.OpenFile "%plhd_file%"
+
+  	if (PEFileProxy.Terminated) then
+		PEFileProxy.PostDebugString "Opening a file produced a fatal error."
+  	else
+    		PEFileProxy.PostDebugString "File successfully opened."
+    		PEFileProxy.UpdateDataTimeStamp "01/01/1970 00:00:00"
+    		PEFileProxy.PostDebugString "Closing this file..."
+		PEFileProxy.SaveAsNewImage "%plhd_file%"
+    		PEFileProxy.CloseFile
+  	end if
+end Sub

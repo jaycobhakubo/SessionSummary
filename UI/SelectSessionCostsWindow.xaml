@@ -1,0 +1,92 @@
+﻿
+<!-- This is an unpublished work protected under the copyright laws of the
+     United States and other countries.  All rights reserved.  Should
+     publication occur the following will apply:  © 2011 GameTech
+     International, Inc. -->
+<ui:EliteWindowBase
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="clr-namespace:GameTech.Elite.UI;assembly=GameTech.Elite.UI"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="GameTech.Elite.Client.Modules.SessionSummary.UI.SelectSessionCostsWindow"
+                    x:ClassModifier="internal"
+                    Title="Select Session Costs" Height="400" Width="600" ResizeMode="NoResize" ShowInTaskbar="False"
+                    Style="{DynamicResource EliteWindow}" WindowStartupLocation="CenterOwner" Loaded="OnLoaded"
+                    ui:WindowClosingBehavior.Closing="{Binding CostCloseCommand}">
+    <Border Margin="10" Style="{DynamicResource LightBlueBorder}">
+        <Grid>
+            <Grid.RowDefinitions>
+            	<RowDefinition/>
+            	<RowDefinition Height="Auto" />
+            	<RowDefinition Height="Auto" MinHeight="94" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+            	<ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                	<RowDefinition Height="0.751*" />
+                	<RowDefinition Height="0.074*"/>
+                	<RowDefinition Height="0.175*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                	<ColumnDefinition Width="0.426*"/>
+                	<ColumnDefinition Width="0.153*"/>
+                	<ColumnDefinition Width="0.421*"/>
+                </Grid.ColumnDefinitions>
+                <Border Margin="15,15,15,20" Grid.RowSpan="3" Style="{DynamicResource SemiTransparentNoBorder}"/>
+                <Border Margin="15,15,15,20" Grid.RowSpan="3" Style="{DynamicResource SemiTransparentNoBorder}" Grid.Column="2"/>
+                <ListBox 
+                    SelectionMode="Extended"
+                    SelectionChanged="CostsListBox_SelectionChanged"
+                    ItemsSource="{Binding Costs, UpdateSourceTrigger=PropertyChanged}" Margin="30,30,30,0">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                            <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+                <Grid Grid.Column="1" Margin="0">
+                	<Grid.RowDefinitions>
+                		<RowDefinition Height="0.57*"/>
+                		<RowDefinition Height="0.43*"/>
+                	</Grid.RowDefinitions>
+                	<Button Margin="0,0,0,25" Content="_Add -&gt;" Command="{Binding CostIncludeCommand}" Width="90" Height="35" VerticalAlignment="Bottom" />
+                	<Button Margin="0,25,0,0" Content="&lt;- _Remove" Command="{Binding CostExcludeCommand}" Grid.Row="1" Width="90" Height="35" VerticalAlignment="Top" />
+                </Grid>
+                <ListBox Grid.Column="2"
+                         SelectionMode="Extended"
+                         ItemsSource="{Binding ChoosenCosts, UpdateSourceTrigger=PropertyChanged}" Margin="30,30,30,0">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                            <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+                <Button Grid.Column="2" Content="C_lear" Command="{Binding CostClearCommand}" HorizontalAlignment="Right" Margin="0,5,30,0" Grid.Row="1" Width="78" VerticalAlignment="Top" />
+                <Grid Margin="22,0,15,0" Grid.Row="2" Grid.Column="2" Height="51" VerticalAlignment="Top">
+                	<Grid.RowDefinitions>
+                		<RowDefinition/>
+                		<RowDefinition/>
+                	</Grid.RowDefinitions>
+                	<Grid.ColumnDefinitions>
+                		<ColumnDefinition Width="0.351*"/>
+                		<ColumnDefinition Width="0.405*"/>
+                		<ColumnDefinition Width="0.244*"/>
+                	</Grid.ColumnDefinitions>
+                	<Label Content="Register costs:" Margin="0" HorizontalAlignment="Left" Width="95" />
+                	<Label Content="Nonregister costs:" Margin="0" Grid.Column="1" HorizontalAlignment="Left" />
+                	<Label Content="Total:" Grid.Column="2" HorizontalAlignment="Left" Margin="0" Width="110" />
+                	<Label Content="{Binding CostsRegister, UpdateSourceTrigger=PropertyChanged}" Margin="0" Grid.RowSpan="2" Grid.Row="1" />
+                	<Label Content="{Binding CostsNonRegister, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="0" Grid.RowSpan="2" Grid.Row="1" />
+                	<Label Content="{Binding CostsTotal, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Margin="0" Grid.RowSpan="2" Grid.Row="1" />
+                </Grid>
+            </Grid>
+            <Border Margin="15,10" Grid.Row="3" Style="{DynamicResource SemiTransparentBorder}">
+                <UniformGrid Columns="2">
+                    <Button Margin="5" Grid.Column="3" VerticalAlignment="Center" Content="_Save" IsDefault="True" Command="{Binding CostSaveCommand}" Width="139" Height="41"/>
+                    <Button Margin="5" Grid.Column="3" VerticalAlignment="Center" Content="Cancel" IsCancel="True" IsEnabled="{Binding CanClose}"  Width="139" Height="41"/>
+                </UniformGrid>
+            </Border>
+        </Grid>
+    </Border>
+</ui:EliteWindowBase>

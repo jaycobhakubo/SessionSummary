@@ -1,0 +1,13 @@
+﻿<ui:EliteWindowBase x:Class="GameTech.Elite.Client.Modules.SessionSummary.UI.SessionSummaryReportWindow"
+                    x:ClassModifier="internal"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="clr-namespace:GameTech.Elite.UI;assembly=GameTech.Elite.UI"
+                    xmlns:local="clr-namespace:GameTech.Elite.Client.Modules.SessionSummary.UI"
+                    xmlns:cr="clr-namespace:SAPBusinessObjects.WPF.Viewer;assembly=SAPBusinessObjects.WPF.Viewer"
+                    Title="Session Summary Report" ShowInTaskbar="False"
+                    Style="{DynamicResource EliteWindow}" WindowStartupLocation="CenterOwner">
+    <Grid>
+        <cr:CrystalReportsViewer x:Name="m_viewer" EnableToolTips="False" ShowLogo="False" ShowCopyButton="True" ShowExportButton="True" ShowGoToPageButton="True" ShowNextPageButton="True" ShowOpenFileButton="False" ShowPrevPageButton="True" ShowPrintButton="True" ShowRefreshButton="False" ShowSearchTextButton="True" ShowStatusbar="True" ShowToggleSidePanelButton="False" ToggleSidePanel="None" />
+    </Grid>
+</ui:EliteWindowBase>

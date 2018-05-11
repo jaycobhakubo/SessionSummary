@@ -1,0 +1,214 @@
+﻿<!-- This is an unpublished work protected under the copyright laws of the
+     United States and other countries.  All rights reserved.  Should
+     publication occur the following will apply:  © 2011 GameTech
+     International, Inc. -->
+<ui:EliteWindowBase x:Name="m_root"
+                    x:Class="GameTech.Elite.Client.Modules.SessionSummary.UI.ActualCashCalculatorWindow"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="clr-namespace:GameTech.Elite.UI;assembly=GameTech.Elite.UI"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                    mc:Ignorable="d"
+                    x:ClassModifier="internal"
+                    Title="Actual Cash Calculator"
+                    ResizeMode="NoResize" 
+                    ShowInTaskbar="False" 
+                    Style="{DynamicResource EliteWindow}" 
+                    WindowStartupLocation="CenterOwner" 
+                    SizeToContent="WidthAndHeight"
+                    MinWidth="1"
+                    MinHeight="1">
+    <ui:EliteWindowBase.Resources>
+        <ui:BooleanInverterConverter x:Key="inverterConverter"/>
+        <BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+        <ui:CombiningConverter x:Key="invertedBoolConverter" 
+                               Converter1="{StaticResource inverterConverter}" 
+                               Converter2="{StaticResource boolToVisConverter}" />        
+    </ui:EliteWindowBase.Resources>
+        
+    <DockPanel Background="{StaticResource LightBlueBrush}">
+        
+        <!-- Button Panel -->
+        <Border DockPanel.Dock="Bottom" Margin="15,0,15,10" Style="{DynamicResource SemiTransparentBorder}">
+            <UniformGrid Margin="0" Grid.Row="1" Columns="2">
+                <Button Content="Save"
+                        Command="{Binding SaveCommand}" 
+                        Width="139" 
+                        Height="41" 
+                        Margin="4"/>
+                <Button Content="Reset"
+                        Command="{Binding ClearCommand}" 
+                        Width="139" 
+                        Height="41" 
+                        Margin="4"/>
+            </UniformGrid>
+        </Border>
+        
+        <!-- Full Total Panel -->
+        <StackPanel DockPanel.Dock="Bottom" 
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal"
+                                    Margin="15 4"
+                    TextElement.FontSize="16">
+            <TextBlock>
+                <Run Text="Total Value : " />
+            </TextBlock>
+            <TextBlock Text="{Binding TotalValue, StringFormat={}{0:F2}}" 
+                       MinWidth="100" 
+                       HorizontalAlignment="Right" 
+                       TextAlignment="Right" 
+                       FontWeight="Bold"/>
+        </StackPanel>
+
+        <!-- Tab Control (Currencies) -->
+        <TabControl ItemsSource="{Binding DisplayCurrencies}"
+                    SelectedItem="{Binding SelectedCurrency}">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
+                    <Setter Property="Visibility"
+                            Value="{Binding Path=DataContext.IsMultiCurrency, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DockPanel}}, Converter={StaticResource boolToVisConverter}}"/>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabControl.ItemTemplate>
+                <!-- Tab View -->
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <!-- Tab Data View -->
+                    <DockPanel Background="{StaticResource LightBlueBrush}">
+                        <Grid DockPanel.Dock="Bottom" Visibility="{Binding Source={x:Reference m_root}, Path=DataContext.IsMultiCurrency, Converter={StaticResource boolToVisConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Currency Totals -->
+                            <StackPanel Grid.Column="0"
+                                    HorizontalAlignment="Left"
+                                    Orientation="Horizontal"
+                                    Margin="15 4">
+                                <TextBlock>
+                                <Run Text="Total Value (" />
+                                <Run Text="{Binding ISOCode, Mode=OneTime}"/>
+                                <Run Text=") :" />
+                                </TextBlock>
+                                <TextBlock Text="{Binding TotalValue, StringFormat={}{0:F2}}" 
+                                       MinWidth="100" 
+                                       HorizontalAlignment="Right" 
+                                       TextAlignment="Right" 
+                                       FontWeight="Bold"/>
+                            </StackPanel>
+
+                            <!-- Currency Totals -->
+                            <StackPanel Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal"
+                                    Margin="15 4">
+                                <TextBlock>
+                                <Run Text="Total Value (" />
+                                <Run Text="{Binding Source={x:Reference m_root}, Path=DataContext.DefaultCurrency.ISOCode, Mode=OneTime}"/>
+                                <Run Text=") :" />
+                                </TextBlock>
+                                <TextBlock Text="{Binding TotalValueInCurrency, StringFormat={}{0:F2}}" 
+                                       MinWidth="100" 
+                                       HorizontalAlignment="Right" 
+                                       TextAlignment="Right" 
+                                       FontWeight="Bold"/>
+                            </StackPanel>
+                        </Grid>                                                
+
+                        <!-- Currency Working Datagrid -->
+                        <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/> <!-- This Item Used to get to the "Currency" DataContext-->
+                        <DataGrid ItemsSource="{Binding DisplayDenominations}"
+                                  SelectionMode="Extended"
+                                  AutoGenerateColumns="False"
+                                  Margin="15 0 15 4"
+                                  IsSynchronizedWithCurrentItem="True"
+                                  CanUserDeleteRows="False"
+                                  CanUserAddRows="False"
+                                  CanUserReorderColumns="False"
+                                  CanUserResizeColumns="False"
+                                  CanUserResizeRows="False"
+                                  CanUserSortColumns="False">
+                            <DataGrid.Columns>
+                                <!-- Name Column -->
+                                <DataGridTextColumn Header="Name" 
+                                                    IsReadOnly="True" 
+                                                    Binding="{Binding Name}" />
+                                
+                                <!-- Quantity Column -->
+                                <DataGridTextColumn Header="Quantity" 
+                                                    Binding="{Binding Quantity}">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" 
+                                                    Value="Right" />
+                                            <Setter Property="Margin" 
+                                                    Value="2 0" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                
+                                <!-- Local Currency Value Column-->
+                                <DataGridTextColumn Header="Value" 
+                                                    IsReadOnly="True" 
+                                                    Binding="{Binding Value, StringFormat={}{0:F2}}">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                            <Setter Property="Margin" Value="2 0" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>                                
+                                
+                                <!-- Local Currency Subtotal Column -->
+                                <DataGridTextColumn Header="Subtotal" 
+                                                    IsReadOnly="True" 
+                                                    MinWidth="100" 
+                                                    Binding="{Binding CurrencyTotal, StringFormat={}{0:F2}}"
+                                                    Visibility="{Binding Source={x:Reference m_root}, Path=DataContext.IsMultiCurrency, Converter={StaticResource boolToVisConverter}}">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                            <Setter Property="Margin" Value="2 0" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>               
+                                
+                                <!-- Exchange Rate Column -->
+                                <DataGridTextColumn Header="Exchange Rate" 
+                                                    IsReadOnly="True" 
+                                                    Visibility="{Binding Source={x:Reference m_root}, Path=DataContext.IsMultiCurrency, Converter={StaticResource boolToVisConverter}}"
+                                                    Binding="{Binding Path=DataContext.ExchangeRate, Source={x:Reference dummyElement}, StringFormat={}{0:F2}}">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                            <Setter Property="Margin" Value="2 0" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                
+                                <!-- Exchange Final Value -->
+                                <DataGridTextColumn Header="Total" 
+                                                    IsReadOnly="True" 
+                                                    MinWidth="100"
+                                                    Binding="{Binding ExchangedTotal, StringFormat={}{0:F2}}">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                            <Setter Property="Margin" Value="2 0" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </DockPanel>
+</ui:EliteWindowBase>

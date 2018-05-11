@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project version='7' encrypted='1'>
+	<steps type='0'>
+		<step action='Make VS 2010'>
+			<AssemblyVer type='11'>-1</AssemblyVer>
+			<Attr type='11'>-1</Attr>
+			<Config>Release|Mixed Platforms</Config>
+			<FileVer type='11'>-1</FileVer>
+			<Filename>%SRC_ROOT%\Dev\ClientModules\SessionSummary\SessionSummary.sln</Filename>
+			<Force type='3'>1</Force>
+			<condcomparison type='3'>6</condcomparison>
+			<condexpr>%RELEASE_BUILD%</condexpr>
+			<name>Build Session Summary (Release)</name>
+		</step>
+		<step action='Make VS 2010'>
+			<AssemblyVer type='11'>-1</AssemblyVer>
+			<Attr type='11'>-1</Attr>
+			<Config>Release|Mixed Platforms</Config>
+			<FileVer type='11'>-1</FileVer>
+			<Filename>%SRC_ROOT%\Dev\ClientModules\SessionSummary\SessionSummary.sln</Filename>
+			<Force type='3'>1</Force>
+			<VersionSel type='3'>1</VersionSel>
+			<condcomparison type='3'>7</condcomparison>
+			<condexpr>%RELEASE_BUILD%</condexpr>
+			<name>Build Session Summary (Buddy Build)</name>
+		</step>
+		<step action='Delete Folder'>
+			<Path>%BUILD_PATH%\Client\Session Summary\Latest</Path>
+			<Recurse type='11'>-1</Recurse>
+			<name>Delete Latest Folder</name>
+		</step>
+		<step action='Copy Files'>
+			<Converted type='11'>-1</Converted>
+			<Delay>15</Delay>
+			<DestDir>%BUILD_PATH%\Client\Session Summary\Latest</DestDir>
+			<Ext>*.dll</Ext>
+			<Incremental type='11'>0</Incremental>
+			<LogCopied type='11'>-1</LogCopied>
+			<ReadOnly type='11'>-1</ReadOnly>
+			<Retries>10</Retries>
+			<SourceDir>%SRC_ROOT%\Dev\ClientModules\SessionSummary\bin\Release</SourceDir>
+			<TBD type='11'>-1</TBD>
+			<name>Copy Files To Latest Folder</name>
+		</step>
+		<step action='Run Program'>
+			<command>%PACKAGER% "%SRC_ROOT%\Dev\ClientModules\SessionSummary\SessionSummary.gtp" -generate</command>
+			<name>Run Packager</name>
+			<outputfrom type='3'>1</outputfrom>
+			<startin>%SRC_ROOT%\Dev\ClientModules\SessionSummary\</startin>
+		</step>
+		<step action='Copy Files'>
+			<Converted type='11'>-1</Converted>
+			<Delay>15</Delay>
+			<DestDir>%BUILD_PATH%\Client\Session Summary\Latest</DestDir>
+			<Ext>*.gtipackage</Ext>
+			<Incremental type='11'>0</Incremental>
+			<LogCopied type='11'>-1</LogCopied>
+			<Move type='11'>-1</Move>
+			<ReadOnly type='11'>-1</ReadOnly>
+			<Retries>10</Retries>
+			<SourceDir>%SRC_ROOT%\Dev\ClientModules\SessionSummary\bin\Release</SourceDir>
+			<TBD type='11'>-1</TBD>
+			<name>Move Package To Latest</name>
+		</step>
+		<step action='VS.NET Get Version'>
+			<Filename>%SRC_ROOT%\Dev\ClientModules\SessionSummary\SessionSummary.csproj</Filename>
+			<name>Get Session Summary Version Number</name>
+		</step>
+		<step action='Copy Files'>
+			<Converted type='11'>-1</Converted>
+			<Delay>15</Delay>
+			<DestDir>%BUILD_PATH%\Client\Session Summary\%VSNET_ASSEM_VER%</DestDir>
+			<Incremental type='11'>0</Incremental>
+			<LogCopied type='11'>-1</LogCopied>
+			<ReadOnly type='11'>-1</ReadOnly>
+			<Recurse type='11'>-1</Recurse>
+			<Retries>10</Retries>
+			<SourceDir>%BUILD_PATH%\Client\Session Summary\Latest</SourceDir>
+			<TBD type='11'>-1</TBD>
+			<name>Copy Files To Version Folder</name>
+		</step></steps>
+	<steps type='2'>
+		<step action='Send Mail'>
+			<From>AutoBuild@gtiemail.com</From>
+			<HTML type='11'>-1</HTML>
+			<Message><![CDATA[An unexpected error occured while building the project: <br /> <br />
+
+<b>Failstep Name:</b> <br />
+%FAILSTEP_NAME%<br /> <br />
+
+<b>Failstep Output:</b> <br />
+%FAILSTEP_OUTPUT%<br /> <br />
+
+<b>Failstep Status:</b> <br />
+%FAILSTEP_STATUS%<br /> <br />
+
+<b>Previous Step:</b> <br />
+%LASTSTEP_NAME%<br /> <br />]]></Message>
+			<Password encrypted='1'>TM3DPOg8beGBari4q6E=</Password>
+			<Priority type='3'>1</Priority>
+			<Server>OCEANUS.GameTech-Reno.com</Server>
+			<Subject>Build Machine: Error Occured</Subject>
+			<Timeout>30</Timeout>
+			<To>%TO_EMAIL%</To>
+			<UserName>AutoBuild</UserName>
+			<name>Send Error E-Mail</name>
+		</step></steps>
+</project>
