@@ -16,6 +16,7 @@ using GameTech.Elite.Base;
 using GameTech.Elite.Client.Modules.SessionSummary.Properties;
 using GameTech.Elite.Client.Modules.SessionSummary.UI;
 using GameTech.Elite.Client.Modules.SessionSummary.ViewModel;
+using GameTech.Elite.Client.Modules.SessionSummary.Messages;
 using GameTech.Elite.Reports;
 using GameTech.Elite.UI;
 using GameTech.Elite.Base.System;
@@ -311,6 +312,8 @@ namespace GameTech.Elite.Client.Modules.SessionSummary.Business
             return true;
         }
 
+     
+        private List<ReportData> m_listSessionSummary;
         /// <summary>
         /// Creates the report used in the application.
         /// </summary>
@@ -320,6 +323,12 @@ namespace GameTech.Elite.Client.Modules.SessionSummary.Business
             LoadingForm.Status = Resources.LoadingReport;
             try
             {
+
+                //m_listSessionSummary = new List<ReportData>();
+                
+                //GetAllReports getUserDefineReportsMsg = new GetAllReports(19);
+                //getUserDefineReportsMsg.Send();
+
                 SessionSummaryReport = Report.GetReport(ReportId.SessionSummary, CultureInfo.CurrentCulture.Name, Settings).Document;
                 SessionSummaryReport.SetParameterValue("@OperatorId", OperatorId);
                 //SessionSummaryReport.SetParameterValue("@GamingDate", "06/06/2011 00:00:00");
@@ -581,7 +590,7 @@ namespace GameTech.Elite.Client.Modules.SessionSummary.Business
                         short session = (short)args[1];
 
                         RefreshSessionSummaryReport(date, session);
-                        m_reportWindow.DisplayReport(SessionSummaryReport);
+                        m_reportWindow.DisplayReport(SessionSummaryReport);//knc
                     }
                     break;
 
@@ -919,7 +928,7 @@ namespace GameTech.Elite.Client.Modules.SessionSummary.Business
         /// <summary>
         /// Gets or Sets the list of supported currencies in the system.
         /// </summary>
-        public IEnumerable<Currency> Currencies 
+        public IEnumerable<Currency> Currencies //knc
         { 
             get; 
             private set; 
