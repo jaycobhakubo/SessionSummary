@@ -316,7 +316,7 @@ namespace GameTech.Elite.Client.Modules.SessionSummary.Business
         /// Creates the report used in the application.
         /// </summary>
         /// <returns>true if succces; otherwise false.</returns>
-        private bool CreateReport()//knc
+        private bool CreateReport()
         {
             LoadingForm.Status = Resources.LoadingReport;
             try
